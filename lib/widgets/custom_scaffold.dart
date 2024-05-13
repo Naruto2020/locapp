@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+/*static const googleView = LatLng(50.6627, 3.0966);
+static const destinationView = LatLng(50.6582, 3.1033);*/
+
 class CustomScaffold extends StatelessWidget {
   const CustomScaffold({super.key, this.child});
 final Widget? child;

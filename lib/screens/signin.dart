@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:locapp/screens/trip_form_screen.dart';
 import '../screens/signup.dart';
 import '../themes/theme.dart';
 import '../widgets/custom_scaffold.dart';
@@ -167,6 +168,11 @@ class _SignInState extends State<SignIn> {
                                       const SnackBar(
                                         content: Text('Traitement des données'),
                                       ),
+                                    );
+                                    // Navigation vers la page "trip_form"
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => const TripFormScreen()),
                                     );
                                   } else if (!rememberPassword) {
                                     ScaffoldMessenger.of(context).showSnackBar(
