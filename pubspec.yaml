@@ -40,6 +40,10 @@ dependencies:
   intl: ^0.17.0
   google_maps_flutter: ^2.2.0
   location: ^5.0.0
+  api_cache_manager: ^1.0.2
+  http: ^0.13.3
+  shared_preferences:
+  jwt_decoder:
   #google_maps_webservice: 0.0.20-nullsafety.5
 
 dev_dependencies:

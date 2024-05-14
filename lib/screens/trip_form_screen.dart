@@ -7,7 +7,8 @@ import '../widgets/custom_scaffold.dart';
 import '../widgets/google_map_widget.dart';
 
 class TripFormScreen extends StatefulWidget {
-  const TripFormScreen({super.key});
+  const TripFormScreen({super.key, this.token,});
+  final token;
 
   @override
   State<TripFormScreen> createState() => _TripFormScreenState();
@@ -25,7 +26,7 @@ class _TripFormScreenState extends State<TripFormScreen> {
   final TextEditingController _departureLngController = TextEditingController();
   final TextEditingController _destinationLatController = TextEditingController();
   final TextEditingController _destinationLngController = TextEditingController();
-  final TextEditingController _nomController = TextEditingController();
+
 
   @override
   void initState() {
@@ -226,15 +227,6 @@ class _TripFormScreenState extends State<TripFormScreen> {
                             }
                             return null;
                           },*/
-                        ),
-                        TextFormField(
-                          controller: _nomController,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter Full name';
-                            }
-                            return null;
-                          },
                         ),
                         const SizedBox(height: 20),
                         ElevatedButton(
