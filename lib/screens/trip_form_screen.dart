@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:locapp/screens/signin.dart';
 
 import '../services/trip_services.dart';
 import '../widgets/custom_scaffold.dart';
 import '../widgets/google_map_widget.dart';
 import '../widgets/notification_widget.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class TripFormScreen extends StatefulWidget {
   const TripFormScreen({super.key, this.token,});
