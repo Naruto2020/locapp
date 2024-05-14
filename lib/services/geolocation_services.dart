@@ -19,5 +19,4 @@ class GeolocationServices {
       throw Exception('Failed to post data');
     }
   }
-
 }

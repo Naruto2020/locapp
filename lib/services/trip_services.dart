@@ -19,6 +19,4 @@ class TripServices {
       throw Exception('Failed to post data');
     }
   }
-
-
 }
