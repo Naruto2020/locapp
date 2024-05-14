@@ -30,7 +30,7 @@ class _SignUpState extends State<SignUp> {
       };
       try {
         final responseData = await AuthServices.login('/auth/signup', regBody);
-        print(responseData);
+        //print(responseData);
         if (mounted) {
           Navigator.push(
             context,
@@ -38,7 +38,7 @@ class _SignUpState extends State<SignUp> {
           );
         }
       } catch (e) {
-        print('Error: $e');
+        throw Exception('Error: $e');
       }
     }
   }
