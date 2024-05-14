@@ -3,6 +3,7 @@ import 'package:icons_plus/icons_plus.dart';
 import 'package:locapp/screens/signin.dart';
 import 'package:locapp/widgets/custom_scaffold.dart';
 
+import '../services/auth_services.dart';
 import '../themes/theme.dart';
 
 class SignUp extends StatefulWidget {
@@ -14,7 +15,33 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   final _formSignupKey  = GlobalKey<FormState>();
+
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   bool agreePersonalData  = true;
+
+  void signUp() async {
+    if(_emailController.text.isNotEmpty && _passwordController.text.isNotEmpty) {
+      var regBody = {
+        "name" : _nameController.text,
+        "email": _emailController.text,
+        "password" : _passwordController.text,
+      };
+      try {
+        final responseData = await AuthServices.login('/auth/signup', regBody);
+        print(responseData);
+        if (mounted) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const SignIn()),
+          );
+        }
+      } catch (e) {
+        print('Error: $e');
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +87,7 @@ class _SignUpState extends State<SignUp> {
                       ),
                       // full name
                       TextFormField(
+                          controller: _nameController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter Full name';
@@ -91,6 +119,7 @@ class _SignUpState extends State<SignUp> {
                         height: 25.0,
                       ),
                       TextFormField(
+                          controller: _emailController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter Email';
@@ -122,6 +151,7 @@ class _SignUpState extends State<SignUp> {
                       ),
                       // password
                       TextFormField(
+                        controller: _passwordController,
                         obscureText: true,
                         obscuringCharacter: '*',
                         validator: (value) {
@@ -195,11 +225,12 @@ class _SignUpState extends State<SignUp> {
                                   content: Text('Traitement des données'),
                                 ),
                               );
+                              signUp();
                             } else if (!agreePersonalData ) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                     content: Text(
-                                      'Veuillez accepter le traitement des données personnelles')),
+                                    'Veuillez accepter le traitement des données personnelles')),
                               );
                             }
                           },
