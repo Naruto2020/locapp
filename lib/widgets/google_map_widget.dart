@@ -1,6 +1,10 @@
 //import 'dart:async';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:locapp/services/geolocation_services.dart';
 import 'package:location/location.dart';
 import '../screens/trip_form_screen.dart';
 
@@ -19,12 +23,15 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
 
   Location _locationController = new Location();
 
-  static const googlePlex = LatLng(50.6627, 3.0966);
-  static const destinationView = LatLng(50.6868, 3.0886);
+  //static const googlePlex = LatLng(50.6627, 3.0966);
+  static const destinationView = LatLng(50.6627, 3.0966);
+
   late LatLng destinationPosition;
-
-
   LatLng? currentPosition = null;
+
+  late DateTime now;
+  late String formattedDateTime;
+  late Timer _timer;
 
 
   // init state and get user geolocation
@@ -32,12 +39,41 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    // Formater la date et l'heure dans un format spécifique
+    formattedDateTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
     getLocationUpdates();
     destinationPosition = LatLng(
         widget.destLat ?? destinationView.latitude,
         widget.destLon ?? destinationView.longitude
     );
+
+    // Initialiser et démarrer le Timer pour envoyer la localisation du user en BDD  toutes les 2 minutes
+    _timer = Timer.periodic(Duration(minutes: 2), (timer) {
+      if (currentPosition != null) {
+        userLocation();
+      }
+    });
+
   }
+
+
+  void userLocation() async {
+    //if(_emailController.text.isNotEmpty && _passwordController.text.isNotEmpty) {
+    var regBody = {
+      "latitude" : currentPosition?.latitude,
+      "longitude": currentPosition?.longitude,
+      "timestamp" : formattedDateTime,
+    };
+    try {
+      final responseData = await GeolocationServices.postUserGeolocation('/geolocation/create', regBody);
+      //print(responseData);
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+    //}
+  }
+
+
 
   @override
   Widget build(BuildContext context) {

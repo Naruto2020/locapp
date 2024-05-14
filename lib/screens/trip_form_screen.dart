@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:locapp/screens/signin.dart';
 
+import '../services/trip_services.dart';
 import '../widgets/custom_scaffold.dart';
 import '../widgets/google_map_widget.dart';
+import '../widgets/notification_widget.dart';
 
 class TripFormScreen extends StatefulWidget {
   const TripFormScreen({super.key, this.token,});
@@ -26,6 +29,38 @@ class _TripFormScreenState extends State<TripFormScreen> {
   final TextEditingController _departureLngController = TextEditingController();
   final TextEditingController _destinationLatController = TextEditingController();
   final TextEditingController _destinationLngController = TextEditingController();
+
+  void postTrip() async {
+    if(
+    _departureTimeController.text.isNotEmpty && _arrivalTimeController.text.isNotEmpty
+    && _departureAddressController.text.isNotEmpty && _destinationAddressController.text.isNotEmpty
+    && _departureLatController.text.isNotEmpty && _departureLngController.text.isNotEmpty
+    && _destinationLatController.text.isNotEmpty && _destinationLngController.text.isNotEmpty
+    ) {
+
+      var regBody = {
+        "departureTime" : _departureTimeController.text,
+        "arrivalTime": _arrivalTimeController.text,
+        "departureAddress" : _departureAddressController.text,
+        "destinationAddress" : _destinationAddressController.text,
+        "departureLat" : _departureLatController.text,
+        "departureLng" : _departureLngController.text,
+        "destinationLng": _destinationLatController.text,
+        "destinationLat": _destinationLngController.text
+      };
+      try {
+        final responseData = await TripServices.createTrip('/travel/create-travel', regBody);
+        /*if (mounted) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const SignIn()),
+          );
+        }*/
+      } catch (e) {
+        throw Exception('Error: $e');
+      }
+    }
+  }
 
 
   @override
@@ -72,6 +107,8 @@ class _TripFormScreenState extends State<TripFormScreen> {
                       destLat: double.tryParse(_destinationLatController.text)?? 0,
                       destLon: double.tryParse(_destinationLngController.text) ?? 0,), // Affichage de la carte Google Maps et recupération des coordonnée de la destination user
                   ),
+                  const SizedBox(height: 20),
+                  const Expanded(child: NotificationWidget()),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -232,8 +269,12 @@ class _TripFormScreenState extends State<TripFormScreen> {
                         ElevatedButton(
                           onPressed: () {
                             if (_formTripKey.currentState!.validate()) {
-                              // Les validations passent, faire quelque chose ici
-                              // Par exemple, enregistrer les données dans une base de données
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Traitement des données'),
+                                ),
+                              );
+                              postTrip();
                             }
                           },
                           child: const Text('Submit'),

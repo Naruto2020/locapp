@@ -35,7 +35,7 @@ class _SignInState extends State<SignIn> {
       };
       try {
         final responseData = await AuthServices.login('/auth/signin', regBody);
-        print(responseData);
+        //print(responseData);
 
         if(responseData.containsKey('token')) {
           var currentToken  = responseData['token'];
@@ -48,10 +48,10 @@ class _SignInState extends State<SignIn> {
             );
           }
         }else {
-          print('Token not found in response');
+          throw Exception('Token not found in response');
         }
       } catch (e) {
-        print('Error: $e');
+        throw Exception('Error: $e');
       }
     }
   }
