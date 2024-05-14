@@ -276,7 +276,7 @@ class _TripFormScreenState extends State<TripFormScreen> {
                               postTrip();
                             }
                           },
-                          child: const Text('Submit'),
+                          child: const Text('Départ'),
                         ),
                       ],
                     ),
